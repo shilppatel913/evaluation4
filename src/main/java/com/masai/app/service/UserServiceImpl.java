@@ -1,6 +1,7 @@
 package com.masai.app.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,19 +23,20 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> registerUser(User user) {
 		System.out.print("hello");
-		//User u=this.userRepository.findById(user.getEmail()).get();
-		//if(u!=null) {
-		//	System.out.println("user already exists");
-		//	return null;
-		//}
+		Optional<User> u=this.userRepository.findById(user.getEmail());
+		if(u.isEmpty()) {
+			System.out.println("user already exists");
+			return null;
+		}
 		this.userRepository.save(user);
 		return this.userRepository.findAll();
 	}
 
 	@Override
 	public boolean loginUser(User user) {
-		User u=this.userRepository.findById(user.getEmail()).get();
-		if(u==null) {
+		Optional<User> u=this.userRepository.findById(user.getEmail());
+		if(!u.isEmpty()) {
+			System.out.println("user already exists");
 			return false;
 		}
 		
